@@ -1,4 +1,4 @@
-This is a fork of all the work User dsx1123 did while he was at Cisco, Big thanks to him for everything he has done. 
+This is a fork and continuation of all the work User dsx1123 did while he was at Cisco, Big thanks to him for everything he has done. 
 
 # telemetry_collector
 Automatically build telemetry collector with [Telegraf](https://github.com/influxdata/telegraf), [Influxdb](https://github.com/influxdata/influxdb), and [Grafana](https://github.com/grafana/grafana), the example of sensor paths is using the native yang model and OpenConfig yang model of NX-OS as an example. `build.sh` script will create self-signed certificates for TLS transport. Using docker images of Telegraf, Influxdb, and Grafana to create containers with docker-compose. tested with `telegraf >= 1.34.2`, `influxdb >= 2.7.12` and `grafana>=11.6.0`.
