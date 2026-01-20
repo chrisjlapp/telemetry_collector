@@ -1,0 +1,1515 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 6,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb01"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "bars",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Mean Path Delay",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb01"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"nxos_dialout\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n\r\n  |> filter(fn: (r) => r.tag1 == \"mdt_dialout\")\r\n  |> filter(fn: (r) => r.source =~ /^${switch:regex}$/)\r\n\r\n  |> filter(fn: (r) => r._measurement == \"Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data\")\r\n  |> filter(fn: (r) => r._field == \"clock_current_data_val/mean_path_delay/nano_seconds\")\r\n\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "clock_current_data_val/mean_path_delay/nano_seconds"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "source",
+              "operator": "=~",
+              "value": "/^$switch$/"
+            }
+          ]
+        }
+      ],
+      "title": "Mean Path Delay",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb01"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "bars",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "displayName": "Offset from GM",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": -250
+              },
+              {
+                "color": "green",
+                "value": -100
+              },
+              {
+                "color": "red",
+                "value": 101
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 11,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb01"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"nxos_dialout\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r.tag1 == \"mdt_dialout\")\r\n  |> filter(fn: (r) => r.source =~ /^${switch:regex}$/)\r\n  |> filter(fn: (r) => r._measurement == \"Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data\")\r\n  |> filter(fn: (r) => r._field == \"clock_current_data_val/offset_from_master/nano_seconds\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "clock_current_data_val/offset_from_master/nano_seconds"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "source",
+              "operator": "=~",
+              "value": "/^$switch$/"
+            }
+          ]
+        }
+      ],
+      "title": "Offset",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb01"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "hex"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 0,
+        "y": 8
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb01"
+          },
+          "groupBy": [],
+          "measurement": "Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-parent-data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"nxos_dialout\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r.tag1 == \"mdt_dialout\")\r\n  |> filter(fn: (r) => r.source =~ /^${switch:regex}$/)\r\n  |> filter(fn: (r) => r._measurement == \"Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-parent-data\")\r\n  |> filter(fn: (r) => r._field == \"grandmaster_identity\")\r\n  |> last()",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "grandmaster_identity"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "source",
+              "operator": "=~",
+              "value": "/^$switch$/"
+            }
+          ]
+        }
+      ],
+      "title": "GrandMaster",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb01"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 11,
+        "y": 8
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "alias": "GM Change",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb01"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-parent-data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"nxos_dialout\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r.tag1 == \"mdt_dialout\")\r\n  |> filter(fn: (r) => r.source =~ /^${switch:regex}$/)\r\n  |> filter(fn: (r) => r._measurement == \"Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-parent-data\")\r\n  |> filter(fn: (r) => r._field == \"grandmaster_identity\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "grandmaster_identity"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "source",
+              "operator": "=~",
+              "value": "/^$switch$/"
+            }
+          ]
+        }
+      ],
+      "title": "changes in GrandMaster over time ",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb01"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ptp-boundary-clock": {
+                  "index": 0,
+                  "text": "Boundary Clock"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 0,
+        "y": 15
+      },
+      "id": 16,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "/^_value$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb01"
+          },
+          "groupBy": [],
+          "measurement": "Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"nxos_dialout\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r.tag1 == \"mdt_dialout\")\r\n  |> filter(fn: (r) => r.source =~ /${switch:regex}/)\r\n  |> filter(fn: (r) => r._measurement == \"Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data\")\r\n  |> filter(fn: (r) => r._field == \"clock_default_data_val/ptp_device_type\")\r\n  |> group()                       // collapse all tag groups\r\n  |> last()\r\n  |> keep(columns: [\"_value\"])     // only return the value column\r\n",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "clock_default_data_val/ptp_device_type"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "source",
+              "operator": "=~",
+              "value": "/^$switch$/"
+            }
+          ]
+        }
+      ],
+      "title": "Device Type",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb01"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ptp-delay-mechanism-p2p": {
+                  "index": 0,
+                  "text": "peer-to-peer"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 11,
+        "y": 15
+      },
+      "id": 19,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb01"
+          },
+          "groupBy": [],
+          "measurement": "Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"nxos_dialout\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r.tag1 == \"mdt_dialout\")\r\n  |> filter(fn: (r) => r.source =~ /^${switch:regex}$/)\r\n  |> filter(fn: (r) => r._measurement == \"Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data\")\r\n  |> filter(fn: (r) => r._field == \"ptp_oper_domain_cfg_data/delay_mechanism\")\r\n  |> last()\r\n",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "ptp_oper_domain_cfg_data/delay_mechanism"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "source",
+              "operator": "=~",
+              "value": "/^$switch$/"
+            }
+          ]
+        }
+      ],
+      "title": "Delay Mechaism (currently Broken on 9200CX)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb01"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ptp-boundary-clock": {
+                  "index": 0,
+                  "text": "Boundary Clock"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 0,
+        "y": 22
+      },
+      "id": 17,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto",
+        "text": {}
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb01"
+          },
+          "groupBy": [],
+          "measurement": "Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"nxos_dialout\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r.tag1 == \"mdt_dialout\")\r\n  |> filter(fn: (r) => r.source =~ /^${switch:regex}$/)\r\n  |> filter(fn: (r) => r._measurement == \"Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data\")\r\n  |> filter(fn: (r) => r._field == \"clock_default_data_val/num_ptp_ports\")\r\n  |> last()\r\n",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "clock_default_data_val/num_ptp_ports"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "source",
+              "operator": "=~",
+              "value": "/^$switch$/"
+            }
+          ]
+        }
+      ],
+      "title": "Total PTP Ports",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb01"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ptp-net-tran-proto-udp-ipv4": {
+                  "index": 0,
+                  "text": "IPv4-UDP"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 11,
+        "y": 22
+      },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "/^ptp_oper_domain_cfg_data/transport_protocol \\{clock_domain=\"0\", host=\"telegraf\", path=\"Cisco\\-IOS\\-XE\\-switch\\-ptp\\-oper:switch\\-ptp\\-oper\\-data/switch\\-ptp\\-clock\\-data\", source=\"9200CX\\-A\", subscription=\"504\", tag1=\"mdt_dialout\"\\}$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb01"
+          },
+          "groupBy": [],
+          "measurement": "Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"nxos_dialout\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r.tag1 == \"mdt_dialout\")\r\n  |> filter(fn: (r) => r.source =~ /^${switch:regex}$/)\r\n  |> filter(fn: (r) => r._measurement == \"Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data\")\r\n  |> filter(fn: (r) => r._field == \"ptp_oper_domain_cfg_data/transport_protocol\")\r\n  |> last()\r\n",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "ptp_oper_domain_cfg_data/transport_protocol"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "source",
+              "operator": "=~",
+              "value": "/^$switch$/"
+            }
+          ]
+        }
+      ],
+      "title": "PTP Transport",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb01"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ptp-net-tran-proto-udp-ipv4": {
+                  "index": 0,
+                  "text": "IPv4-UDP"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 29
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "/^ptp_oper_domain_cfg_data/dscp_event \\{clock_domain=\"0\", host=\"telegraf\", path=\"Cisco\\-IOS\\-XE\\-switch\\-ptp\\-oper:switch\\-ptp\\-oper\\-data/switch\\-ptp\\-clock\\-data\", source=\"9200CX\\-A\", subscription=\"504\", tag1=\"mdt_dialout\"\\}$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb01"
+          },
+          "groupBy": [],
+          "measurement": "Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"nxos_dialout\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r.tag1 == \"mdt_dialout\")\r\n  |> filter(fn: (r) => r.source =~ /^${switch:regex}$/)\r\n  |> filter(fn: (r) => r._measurement == \"Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data\")\r\n  |> filter(fn: (r) => r._field == \"ptp_oper_domain_cfg_data/dscp_event\")\r\n  |> last()\r\n",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "ptp_oper_domain_cfg_data/dscp_event"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "source",
+              "operator": "=~",
+              "value": "/^$switch$/"
+            }
+          ]
+        }
+      ],
+      "title": "Event Msg - DSCP",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb01"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ptp-profile-default": {
+                  "index": 0,
+                  "text": "Default Profile"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 9,
+        "x": 6,
+        "y": 29
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^clock_default_data_val/profile \\{clock_domain=\"0\", host=\"telegraf\", path=\"Cisco\\-IOS\\-XE\\-switch\\-ptp\\-oper:switch\\-ptp\\-oper\\-data/switch\\-ptp\\-clock\\-data\", source=\"9200CX\\-A\", subscription=\"504\", tag1=\"mdt_dialout\"\\}$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb01"
+          },
+          "groupBy": [],
+          "measurement": "Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"nxos_dialout\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r.tag1 == \"mdt_dialout\")\r\n  |> filter(fn: (r) => r.source =~ /^${switch:regex}$/)\r\n  |> filter(fn: (r) => r._measurement == \"Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data\")\r\n  |> filter(fn: (r) => r._field == \"clock_default_data_val/profile\")\r\n  |> last()\r\n",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "clock_default_data_val/profile"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "source",
+              "operator": "=~",
+              "value": "/^$switch$/"
+            }
+          ]
+        }
+      ],
+      "title": "PTP Profile",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb01"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 7,
+        "x": 15,
+        "y": 29
+      },
+      "id": 23,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "/^ptp_oper_domain_cfg_data/dscp_general \\{clock_domain=\"0\", host=\"telegraf\", path=\"Cisco\\-IOS\\-XE\\-switch\\-ptp\\-oper:switch\\-ptp\\-oper\\-data/switch\\-ptp\\-clock\\-data\", source=\"9200CX\\-A\", subscription=\"504\", tag1=\"mdt_dialout\"\\}$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb01"
+          },
+          "groupBy": [],
+          "measurement": "Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"nxos_dialout\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r.tag1 == \"mdt_dialout\")\r\n  |> filter(fn: (r) => r.source =~ /^${switch:regex}$/)\r\n  |> filter(fn: (r) => r._measurement == \"Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-clock-data\")\r\n  |> filter(fn: (r) => r._field == \"ptp_oper_domain_cfg_data/dscp_general\")\r\n  |> last()\r\n",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "ptp_oper_domain_cfg_data/dscp_general"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "source",
+              "operator": "=~",
+              "value": "/^$switch$/"
+            }
+          ]
+        }
+      ],
+      "title": "General Msg - DSCP",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb01"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "color-text"
+            },
+            "inspect": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "ptp-port-state-faulty": {
+                  "color": "red",
+                  "index": 2,
+                  "text": "FAULTY"
+                },
+                "ptp-port-state-master": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "MASTER"
+                },
+                "ptp-port-state-passive": {
+                  "color": "blue",
+                  "index": 4,
+                  "text": "PASSIVE"
+                },
+                "ptp-port-state-slave": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "SLAVE"
+                },
+                "ptp-port-state-unknown": {
+                  "color": "purple",
+                  "index": 3,
+                  "text": "UNKNOWN"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 18,
+        "w": 22,
+        "x": 0,
+        "y": 35
+      },
+      "id": 14,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "port_state {if_name=\"TenGigabitEthernet1/1/1\", source=\"9200CX-A\"}"
+          }
+        ]
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb01"
+          },
+          "groupBy": [],
+          "measurement": "Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-port-data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: \"nxos_dialout\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r.tag1 == \"mdt_dialout\")\r\n  |> filter(fn: (r) => r.source == \"$switch\")\r\n  |> filter(fn: (r) => r._measurement == \"Cisco-IOS-XE-switch-ptp-oper:switch-ptp-oper-data/switch-ptp-port-data\")\r\n  |> filter(fn: (r) => r._field == \"port_state\")\r\n\r\n  // group only to get last per interface\r\n  |> group(columns: [\"if_name\"])\r\n  |> last()\r\n\r\n  // UNGROUP → collapse back into one table\r\n  |> group()\r\n\r\n  |> keep(columns: [\"_time\", \"source\", \"if_name\", \"_value\"])\r\n  |> rename(columns: {_value: \"port_state\"})\r\n  |> sort(columns: [\"if_name\"])\r\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "port_state"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "source",
+              "operator": "=~",
+              "value": "/^$switch$/"
+            }
+          ]
+        }
+      ],
+      "title": "PTP State",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "host": true,
+              "last": true,
+              "path": true,
+              "subscription": true
+            },
+            "indexByName": {
+              "_time": 3,
+              "if_name": 1,
+              "port_state": 2,
+              "source": 0
+            },
+            "renameByName": {
+              "_time": "Last Update",
+              "if_name": "Interface",
+              "port_state": "Port state",
+              "source": "Switch"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "preload": false,
+  "refresh": "5s",
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": [
+            "9200CX-A"
+          ],
+          "value": [
+            "9200CX-A"
+          ]
+        },
+        "datasource": "influxdb01",
+        "definition": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"nxos_dialout\",\r\n  tag: \"source\",\r\n  predicate: (r) => r.tag1 == \"mdt_dialout\",\r\n  start: -30d\r\n)\r\n",
+        "description": "switch",
+        "includeAll": true,
+        "multi": true,
+        "name": "switch",
+        "options": [],
+        "query": {
+          "0": "s",
+          "1": "h",
+          "2": "o",
+          "3": "w",
+          "4": " ",
+          "5": "t",
+          "6": "a",
+          "7": "g",
+          "8": " ",
+          "9": "v",
+          "10": "a",
+          "11": "l",
+          "12": "u",
+          "13": "e",
+          "14": "s",
+          "15": " ",
+          "16": "w",
+          "17": "i",
+          "18": "t",
+          "19": "h",
+          "20": " ",
+          "21": "k",
+          "22": "e",
+          "23": "y",
+          "24": " ",
+          "25": "=",
+          "26": " ",
+          "27": "\"",
+          "28": "s",
+          "29": "o",
+          "30": "u",
+          "31": "r",
+          "32": "c",
+          "33": "e",
+          "34": "\"",
+          "query": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"nxos_dialout\",\r\n  tag: \"source\",\r\n  predicate: (r) => r.tag1 == \"mdt_dialout\",\r\n  start: -30d\r\n)\r\n"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "GigabitEthernet1/0/4",
+          "value": "GigabitEthernet1/0/4"
+        },
+        "datasource": "influxdb01",
+        "definition": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"nxos_dialout\",\r\n  tag: \"if_name\",\r\n  predicate: (r) => r.tag1 == \"mdt_dialout\" and r.source =~ /^${switch:regex}$/,\r\n  start: -30d\r\n)\r\n",
+        "description": "interface",
+        "includeAll": false,
+        "multi": true,
+        "name": "interface",
+        "options": [],
+        "query": {
+          "0": "s",
+          "1": "h",
+          "2": "o",
+          "3": "w",
+          "4": " ",
+          "5": "t",
+          "6": "a",
+          "7": "g",
+          "8": " ",
+          "9": "v",
+          "10": "a",
+          "11": "l",
+          "12": "u",
+          "13": "e",
+          "14": "s",
+          "15": " ",
+          "16": "w",
+          "17": "i",
+          "18": "t",
+          "19": "h",
+          "20": " ",
+          "21": "k",
+          "22": "e",
+          "23": "y",
+          "24": " ",
+          "25": "=",
+          "26": " ",
+          "27": "\"",
+          "28": "i",
+          "29": "f",
+          "30": "_",
+          "31": "n",
+          "32": "a",
+          "33": "m",
+          "34": "e",
+          "35": "\"",
+          "query": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"nxos_dialout\",\r\n  tag: \"if_name\",\r\n  predicate: (r) => r.tag1 == \"mdt_dialout\" and r.source =~ /^${switch:regex}$/,\r\n  start: -30d\r\n)\r\n"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "2026-01-20T14:17:52.782Z",
+    "to": "2026-01-20T14:27:52.782Z"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "PTP -Telemetry",
+  "uid": "pVcgha-Vk",
+  "version": 31
+}
