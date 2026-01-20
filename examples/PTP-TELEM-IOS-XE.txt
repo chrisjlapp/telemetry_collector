@@ -1,0 +1,80 @@
+#C9K PTP Telemetry
+
+Telemety specific steps 
+
+
+
+Step 1 - Create a user with privledge level 15
+(This step may differ depending on how customer does authentication
+
+
+
+Device#enable
+Device#conf t
+Device(config)# username example-name privilege 15 password example_password
+
+
+
+Step 2 - Enable netconf-yang
+
+Device(config)# netconf-yang
+
+
+
+
+Step 3 - verify the following processes are running 
+
+Device# show platform software yang-management process 
+
+confd : Running 
+nesd : Running 
+syncfd : Running 
+ncsshd : Running 
+dmiauthd : Running 
+nginx : Running 
+ndbmand : Running 
+pubd : Running 
+gnmib : Running 
+
+
+Step -4 if you havent done so already, Configure your managment interface to send the telemetry from 
+
+
+interface GigabitEthernet0/0
+ vrf forwarding Mgmt-vrf
+ ip address 172.26.193.104 255.255.255.0
+ negotiation auto
+
+
+
+
+#PTP sensors 
+
+telemetry ietf subscription 501
+ encoding encode-kvgpb
+ filter xpath /switch-ptp-ios-xe-oper:switch-ptp-oper-data/switch-ptp-parent-data
+ source-address 192.168.2.250
+ stream yang-push
+ update-policy periodic 3000
+ receiver ip address 192.168.2.105 57000 protocol grpc-tcp
+telemetry ietf subscription 502
+ encoding encode-kvgpb
+ filter xpath /switch-ptp-ios-xe-oper:switch-ptp-oper-data/switch-ptp-port-data/port-state
+ source-address 192.168.2.250
+ stream yang-push
+ update-policy periodic 3000
+ receiver ip address 192.168.2.105 57000 protocol grpc-tcp
+telemetry ietf subscription 503
+ encoding encode-kvgpb
+ filter xpath /switch-ptp-ios-xe-oper:switch-ptp-oper-data/switch-ptp-correction-data
+ source-address 192.168.2.250
+ stream yang-push
+ update-policy periodic 3000
+ receiver ip address 192.168.2.105 57000 protocol grpc-tcp
+telemetry ietf subscription 504
+ encoding encode-kvgpb
+ filter xpath /switch-ptp-ios-xe-oper:switch-ptp-oper-data/switch-ptp-clock-data
+ source-address 192.168.2.250
+ stream yang-push
+ update-policy on-change
+ receiver ip address 192.168.2.105 57000 protocol grpc-tcp
