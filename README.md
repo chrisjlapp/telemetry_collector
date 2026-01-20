@@ -65,6 +65,7 @@ docker-ce, OpenSSL, docker-compose, any Linux distribution, see Known Issues if 
    -  The `Endpoints` shows the arp tables and Mac address tables of all the switches.
    -  The `Interface Counters` shows all kinds of interface counters that is collected using the Openconfig model.
    -  The `System Capacity` shows the current system utilization of NX-OS using metric collected from [icam](https://www.cisco.com/c/en/us/td/docs/dcn/nx-os/nexus9000/103x/configuration/icam/cisco-nexus-9000-series-nx-os-icam-configuration-guide-release-103x.html)
+   -  The `PTP Telemetry` shows PTP Statistics for C9K Switches 
 
 6. Example of telegraf configuration can be found below:
    - [telegraf.conf.example](etc/telegraf/telegraf.conf.example) example of cisco_telemetry_mdt config
