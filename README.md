@@ -13,7 +13,7 @@ docker-ce, OpenSSL, docker-compose, any Linux distribution, see Known Issues if 
     ```bash
     export GNMI_USER=telemetry
     export GNMI_PASSWORD=SuperSecretPassword
-    ./build.sh start
+    sudo -E ./build.sh start
     ```
     ```
     2020-07-30T22:49:02--LOG--influxdb database folder does not exist, creating one
